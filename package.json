@@ -1,6 +1,6 @@
 {
   "name": "xiao-zao-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "FE template and build tool",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
