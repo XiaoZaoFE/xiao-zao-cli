@@ -1,12 +1,12 @@
 {
   "name": "xiao-zao-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FE template and build tool",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "xiao-zao": "./bin/xz.js"
+    "xiao-zao": "./bin/xiao-zao.js"
   },
   "keywords": [
     "xiao-zao"
@@ -26,6 +26,7 @@
     "html-webpack-plugin": "^3.2.0",
     "inquirer": "^6.2.1",
     "ip": "^1.1.5",
+    "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
@@ -40,6 +41,7 @@
     "sass-loader": "^7.1.0",
     "script-loader": "^0.7.2",
     "style-loader": "^0.23.1",
+    "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",
@@ -49,9 +51,5 @@
     "zepto": "^1.2.0"
   },
   "author": "Syan",
-  "license": "MIT",
-  "devDependencies": {
-    "less": "^3.9.0",
-    "stylus": "^0.54.5"
-  }
+  "license": "MIT"
 }

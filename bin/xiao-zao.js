@@ -30,17 +30,10 @@ program.on('--help', function(){
 
 program.parse(process.argv);
 
-// console.log('! program:', program)
-// console.log('!================')
-
-// if (!process.argv.slice(2).length) {
-//   program.outputHelp()
-// }
 if (!program.runningCommand) {
     console.log('');
     console.log('  Unknow command: ' + program.args.join(' '));
     console.log('');
     console.log('  See help `xiao-zao help`');
     console.log('')
-    // program.help()
 }

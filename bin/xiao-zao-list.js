@@ -27,7 +27,7 @@ request(
       console.log();
       console.log("  You can base on template init project:");
       console.log();
-      console.log("      elf init -t " + requestBody[0].name);
+      console.log("      xiao-zao init -t " + requestBody[0].name);
       console.log();
     } else {
       console.error(requestBody.message);

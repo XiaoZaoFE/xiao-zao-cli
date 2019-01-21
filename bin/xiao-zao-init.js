@@ -15,7 +15,10 @@ program
     .option('-c, --clone', 'use git clone')
     .parse(process.argv)
 
-const projectName = program.args[0] || program.name
+const args = program.args
+let { name } = program
+
+const projectName = args[0] || name
 
 let template = 'babel' // default use `base` template
 if (program.template) template = program.template
@@ -41,7 +44,7 @@ function ask() {
           return '项目名不能为空！'
         }
         if (fs.existsSync(input)) {
-          return '当前目录已经存在同名项目，请换一个项目名:'
+          return '当前目录已经存在同名项目，请换一个项目名!'
         }
         return true
       }
@@ -50,7 +53,7 @@ function ask() {
     prompts.push({
       type: 'input',
       name: 'projectName',
-      message: '当前目录已经存在同名项目，请换一个项目名:',
+      message: '当前目录已经存在同名项目，请换一个项目名!',
       validate (input) {
         if (!input) {
           return '项目名不能为空！'
@@ -69,11 +72,12 @@ function create(pathName) {
   console.log('')
   console.log(chalk.green(`即将创建一个新项目!`))
   fs.ensureDirSync(path.resolve(pathName))
-  init(template, path.resolve(pathName))
+  init(template, pathName)
 }
 
-function init(from, to) {
+function init(from, pathName) {
   const spinner = ora('Downloading template').start()
+  const to = path.resolve(pathName)
   download(from, to, { clone }, function (err) {
     spinner.stop()
     if (err) {
@@ -91,8 +95,8 @@ function init(from, to) {
       console.log('')
       console.log('  Base on ' + chalk.green(template) + ' init project success')
       console.log('')
-      if (projectName) {
-        console.log(chalk.cyan('  $ cd ' + projectName + ' && npm install'))
+      if (pathName) {
+        console.log(chalk.cyan('  $ cd ' + pathName + ' && npm install'))
       } else {
         console.log(chalk.cyan('  $ npm install'))
       }
