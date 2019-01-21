@@ -3,6 +3,8 @@ const _ = require('lodash')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const allConfig = require('../config/index.js')
 const baseWebpackConfig = require('./webpack.base.js')
@@ -27,18 +29,6 @@ const imageWebpackLoader = {
 config.enableImageMin && imageLoaders.push(imageWebpackLoader)
 config.enableImageMin && imageToBase64Loaders.push(imageWebpackLoader)
 
-const cssLoader = [{
-  loader: 'css-loader',
-  options: _.merge({}, config.cssLoaderOptions, {
-    minimize: config.enableCSSCompress
-  })
-}, {
-  loader: 'postcss-loader',
-  options: {
-    plugins: postcssPlugins
-  }
-}]
-
 const publicPath = config.outputCssPublicPath || config.output.publicPath
 
 const plugins = [
@@ -50,6 +40,21 @@ const plugins = [
     // minimize: true
   })
 ]
+
+const cssLoader = [     {
+  loader: MiniCssExtractPlugin.loader,
+  options: {
+    publicPath: publicPath
+  }
+},{
+  loader: 'css-loader',
+  options:config.cssLoaderOptions
+}, {
+  loader: 'postcss-loader',
+  options: {
+    plugins: postcssPlugins
+  }
+}]
 
 module.exports = merge(baseWebpackConfig, {
   mode: "production",
@@ -74,48 +79,34 @@ module.exports = merge(baseWebpackConfig, {
             publicPath: publicPath
           }
         },
-        "css-loader",
-      ]
+      ].concat(cssLoader)
     }, {
       test: /\.scss$/,
-      use: [
-        "style-loader",
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: publicPath
-          }
-        },
-        "css-loader",
-        "sass-loader",
-      ]
+      use: ["style-loader"].concat(cssLoader, "sass-loader")
     }, {
       test: /\.less$/,
-      use: [
-        "style-loader",
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: publicPath
-          }
-        },
-        "css-loader",
-        "less-loader",
-      ]
+      use: ["style-loader"].concat(cssLoader, "less-loader")
     }, {
       test: /\.styl$/,
-      use: [
-        "style-loader",
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: publicPath
+      use: ["style-loader"].concat(cssLoader, "stylus-loader")
+    }]
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin(),
+      new OptimizeCSSAssetsPlugin({
+        assetNameRegExp: /\.css$/g,
+        cssProcessorOptions: {
+          safe: true,
+          autoprefixer: { disable: true },
+          mergeLonghand: false,
+          discardComments: {
+            removeAll: true // 移除注释
           }
         },
-        "css-loader",
-        "stylus-loader",
-      ]
-    }]
+        canPrint: true
+      })
+    ]
   },
   plugins: plugins
 })

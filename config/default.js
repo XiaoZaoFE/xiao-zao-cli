@@ -76,35 +76,6 @@ module.exports = {
   },
 
   /**
-   * postcss-sprites 默认配置
-   * 详细描述参考：https://github.com/2createStudio/postcss-sprites
-   */
-  enableSpritesOnDev: false, // 是否在 dev 时合成雪碧图
-  spritesOptions: {
-    stylesheetPath: 'src/css/',
-    spritePath: 'src/img/',
-    retina: true,
-    relativeTo: 'rule',
-    spritesmith: {
-      algorithm: 'left-right',
-      padding: 2
-    },
-    verbose: false,
-    // 将 img 目录下的子目录作为分组，子目录下的 png 图片会合成雪碧图
-    groupBy: function(image) {
-      var reg = /img\/(\S+)\/\S+\.png$/.exec(image.url);
-      var groupName = reg ? reg[1] : reg;
-      return groupName ? Promise.resolve(groupName) : Promise.reject();
-    },
-    // 非 img 子目录下面的 png 不合
-    filterBy: function(image) {
-      return /img\/\S+\/\S+\.png$/.test(image.url)
-        ? Promise.resolve()
-        : Promise.reject();
-    }
-  },
-
-  /**
    * postcss-plugin-px2rem 默认配置
    * 详细描述参考：https://github.com/ant-tool/postcss-plugin-px2rem
    */
@@ -134,7 +105,7 @@ module.exports = {
   DEVELOPMENT: {
     XZ_ENV: 'development',
     // 配置是否在 Terminal 显示测试链接二维码
-    enableDisplayQR: false
+    enableDisplayQR: true
   },
 
   /**

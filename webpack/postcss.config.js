@@ -1,7 +1,5 @@
 const _ = require('lodash')
-const postcss = require('postcss')
 const autoprefixer = require('autoprefixer')
-const sprites = require('postcss-sprites')
 const assets = require('postcss-assets')
 const px2rem = require('postcss-plugin-px2rem')
 
@@ -13,26 +11,6 @@ const postcssPlugins = [].concat(allConfig.postcssPlugins)
 
 // assets
 postcssPlugins.push(assets(config.assetsOptions))
-
-// sprites
-const spritesOptions = config.spritesOptions
-if (config.enableREM) {
-  const updateRule = require('postcss-sprites/lib/core').updateRule
-
-  spritesOptions.hooks = {
-    onUpdateRule: function (rule, token, image) {
-      updateRule(rule, token, image)
-
-      rule.insertAfter(rule.last, postcss.decl({
-        prop: 'background-size',
-        value: image.spriteWidth / image.ratio + 'px ' + image.spriteHeight / image.ratio + 'px;'
-      }))
-    }
-  }
-}
-if (config.enableSpritesOnDev || NODE_ENV === 'production') {
-  postcssPlugins.push(sprites(spritesOptions))
-}
 
 // px2rem
 if (config.enableREM) {

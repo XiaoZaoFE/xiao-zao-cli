@@ -14,9 +14,9 @@ const webpackConfig = require('../webpack/webpack.config.dev.js')
 const isInteractive = process.stdout.isTTY
 
 let isFirstRun = true
+let compiler = webpack(webpackConfig)
 
 function setupCompiler(host, port) {
-  compiler = webpack(webpackConfig)
 
   compiler.plugin('invalid', function () {
     console.log('')
@@ -52,7 +52,6 @@ function setupCompiler(host, port) {
       console.log(chalk.cyan('  http://' + host + ':' + port + '/'))
       console.log('')
       if (allConfig.DEVELOPMENT.enableDisplayQR) {
-        console.log('---qrcode----');
         qrcode.generate('http://' + host + ':' + port + '/', {
           small: true
         }, function (qrcode) {
@@ -67,7 +66,6 @@ function setupCompiler(host, port) {
 
 function runDevServer(host, port) {
   const devServer = new WebpackDevServer(compiler, webpackConfig.devServer)
-
   devServer.listen(port, host, (err) => {
     if (err) {
       return console.log(err,'-----错误-----')
@@ -80,6 +78,23 @@ function runDevServer(host, port) {
       openBrowser('http://' + host + ':' + port + '/')
     }
   })
+  // if(devServer.checkHost(host)) {
+  //   devServer.listen(port, host, (err) => {
+  //     if (err) {
+  //       return console.log(err,'-----错误-----')
+  //     }
+  //
+  //     console.log(chalk.cyan('  Starting the development server...'))
+  //     console.log()
+  //
+  //     if (isInteractive) {
+  //       openBrowser('http://' + host + ':' + port + '/')
+  //     }
+  //   })
+  // } else {
+  //   console.log( chalk.red('lsof -i tcp:'+port))
+  //   console.log( chalk.red('kill PID（进程的PID，如2044)'))
+  // }
 }
 
 function run(port) {
