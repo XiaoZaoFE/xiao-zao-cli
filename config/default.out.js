@@ -10,6 +10,7 @@ module.exports = {
   baseSize: 10, // 计算 rem 的基数，通常不用修改
   enableREM: true, // 是否用 rem 做适配
   enableZoom: true, // 是否用 zoom 做适配
+  proxy: {},
 
   /**
    * webpack base config

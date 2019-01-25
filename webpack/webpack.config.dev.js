@@ -97,6 +97,7 @@ module.exports = merge(baseWebpackConfig, {
     hot: true,
     inline: true,
     quiet: true,
+    proxy: config.proxy,
     // compress: true,
     // clientLogLevel: 'none',
     historyApiFallback: true,
