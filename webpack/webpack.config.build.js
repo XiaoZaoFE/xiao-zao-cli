@@ -71,15 +71,7 @@ module.exports = merge(baseWebpackConfig, {
       use: imageToBase64Loaders
     }, {
       test: /\.css$/,
-      use: [
-        "style-loader",
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: publicPath
-          }
-        },
-      ].concat(cssLoader)
+      use: ["style-loader"].concat(cssLoader)
     }, {
       test: /\.scss$/,
       use: ["style-loader"].concat(cssLoader, "sass-loader")

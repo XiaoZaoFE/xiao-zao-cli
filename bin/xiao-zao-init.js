@@ -20,16 +20,13 @@ let { name } = program
 
 const projectName = args[0] || name
 
-let template = 'babel' // default use `base` template
+let template = null // default use `base` template
 if (program.template) template = program.template
-let isUseDefault = !~template.indexOf('/')
-if (isUseDefault) template = `XiaoZaoFE/${template}-templates`
-
 const clone = program.clone || false
 
 ask()
     .then(answers => {
-      create(answers.projectName)
+      create(answers.projectName || projectName, answers.template || template)
     })
 
 function ask() {
@@ -65,14 +62,49 @@ function ask() {
       }
     })
   }
+
+  const templateChoices = [{
+    name: '默认模板',
+    value: 'babel'
+  }, {
+    name: 'React 模板',
+    value: 'react'
+  }]
+
+  if (typeof template !== 'string') {
+    prompts.push({
+      type: 'list',
+      name: 'template',
+      message: '请选择模板',
+      choices: templateChoices
+    })
+  } else {
+    let isTemplateExist = false
+    templateChoices.forEach(item => {
+      if (item.value === template) {
+        isTemplateExist = true
+      }
+    })
+    if (!isTemplateExist) {
+      console.log(chalk.red('你选择的模板不存在!'))
+      console.log(chalk.red('目前提供了以下模板以供使用:'))
+      console.log()
+      templateChoices.forEach(item => {
+        console.log(chalk.green(`- ${item.name}`))
+      })
+      process.exit(1)
+    }
+  }
   return inquirer.prompt(prompts)
 }
 
-function create(pathName) {
-  console.log('')
+function create(pathName, templateName) {
   console.log(chalk.green(`即将创建一个新项目!`))
   fs.ensureDirSync(path.resolve(pathName))
-  init(template, pathName)
+
+  template = templateName
+  templateName = `XiaoZaoFE/${templateName}-templates`
+  init(templateName, pathName)
 }
 
 function init(from, pathName) {
